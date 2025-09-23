@@ -32,18 +32,23 @@ avgSGs = []
 errAvgSGs = []
 avgAimDiffs = []
 fracClubChanges = []
-
+avgSGpmErrs = []
 #create results table
 ret = {}
+ndig = 3
 for idx, df in enumerate(players):
 	sumSG = df["ESG noonan - ESG gut"].sum()
-	sumSGs.append(sumSG)
+	sumSGs.append(round(sumSG,ndig))
 
 	avgSG = df["ESG noonan - ESG gut"].mean()
-	avgSGs.append(avgSG)
+	avgSGs.append(round(avgSG,ndig))
 
 	errAvgSG = df["ESG noonan - ESG gut"].std() / np.sqrt(len(df))
-	errAvgSGs.append(errAvgSG)
+	errAvgSGs.append(round(errAvgSG,ndig))
+
+	avgSGpmErr = r"{} $\pm$ {}".format(round(avgSG,ndig), round(errAvgSG,ndig))
+	avgSGpmErrs.append(avgSGpmErr)
+	print(avgSGpmErr)
 
 	avgAimDiff = df["Aim Line Difference (Yds)"].mean()
 	avgAimDiffs.append(avgAimDiff)
@@ -54,9 +59,9 @@ for idx, df in enumerate(players):
 	fracClubChanges.append(fracClubChange)
 
 
-ret["sumSG"] = sumSGs
-ret["avgSG"] = avgSGs
-ret["errAvgSG"] = errAvgSGs
+ret[r"sum $\Delta$ SG"] = sumSGs
+ret[r"avg $\Delta$ SG $\pm \sigma_{\Delta \text{SG}}$"] = avgSGpmErrs
+ret["errSG"] = errAvgSGs
 ret["avgAimDiff"] = avgAimDiffs
 ret["fracClubChanges"] = fracClubChanges
 ret_df = pd.DataFrame(ret)
