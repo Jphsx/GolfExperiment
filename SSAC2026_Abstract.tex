@@ -1,0 +1,58 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{authblk} 
+\usepackage{booktabs}
+
+
+\title{Improving Golf Scores with Shot Probabilities}
+\author[1]{Justin Anguiano}
+\author[1]{Margaret Lazarovits}
+\author[2]{Matt Williams}
+\affil[1]{Department of Physics, University of Kansas}
+\affil[2]{Noonan Caddie}
+
+\date{SSAC 2026}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+With factors like lie, wind, elevation, and other course dependencies to take into consideration, professional golf players have developed a finely-tuned intuition that leads them to greatness. And this intuition can still be wrong. Taking a statistically-robust, quantifiable approach, we present a new algorithm for decision making in golf. Our algorithm combines statistical descriptions of players’ shot patterns with a professionally-backed decision-making heuristic to provide course-specific, personalized, and performant recommendations, even in the limit of small sample sizes. We evaluate the robustness of our algorithm in three aims: 1) quantifying the sensitivity of our statistical model to sample size, 2) quantifying the sensitivity of the full algorithm to sample size, and 3) measuring the impact of the full algorithmic recommendation on players’ performances.
+\section{Methods}
+Having obtained player shot information from a golf simulator, we can construct a statistical model of these dispersion patterns with a bivariate Gaussian, parameterized by its mean vector $\mu$ and covariance matrix $\Sigma$, that is projected onto the course at hand. This 2D probabilistic description of players’ shots allows us to calculate the percent chance of the average shot to land in a certain area of the course (ie fairway, green, etc). The percent chance is defined as the overlap of the probability distribution with a given area, calculated with a computationally-efficient, irregular polygon integration method. Then, a heuristic algorithm is run over these likelihoods to produce a recommendation for both the players’ aimline to the pin and club selection. This heuristic optimizes for fairway and green percent chances, while taking into account hazards and overall distance as well.
+[insert graphic of dispersion pattern on course]
+Our three aims address the robustness of each step of our decision-making algorithm, from model to hole playthrough. Aim 1 quantifies the reliability of the simulator-produced Gaussian model in real world scenarios. For this experiment, we will measure the per-shot consistency of the model by evaluating the Mahalanobis distance and the overall self-consistency by calculating the binomial probability of individual shots in various probability rings given models produced by different sample sizes. 
+[Aim 2 focuses on the sensitivity of the heuristic to sample size. We will evaluate the Strokes Gained (SG) of players’ shots based on recommendations provided by models produced from different sample sizes. This measurement will focus on holes with irregular shapes and high hazard density for particularly challenging environments.]
+Our third aim measures the performance difference between the algorithmic recommendation and a player’s intuition. In order to control for the subjective nature of players’ intuitions, we analyze multiple players at comparable, expert skill levels. Here, we randomly select starting positions over multiple holes to account for different lies. On a shot-by-shot basis, the club selection, aim line, landing position and expected Strokes Gained (ESG) is compared between the players’ intuition and algorithm recommendation to evaluate the efficacy of the algorithm on the level of an individual decision. [To quantify the strength of the algorithmic recommendation on the level of hole playthrough, we evaluate similar metrics but over the set of shots that comprise the chain of decisions during hole playthrough].  
+
+\section{Results}
+Aim 1 demonstrated that the model parameter error demonstrated the expected 1/N dependence on sample size N. The average Mahalanobis distance per-shot, also as a function of N is {x1, x2, …, xN}, demonstrating that our dispersion modeling is self-consistent; shots taken on real courses can be reliably modeled with the same distribution as shots taken in a simulator. Additionally, the binomial probability of shots to land in a given range defined by the Gaussian covariance as a function of N is {x1, x2, …, xN}. This result validates the choice of model for dispersion patterns.
+Aim 2 showed that our decision-making heuristic is a reasonable train of logic for successful shots that is able to be generalized to different courses. The average SG over our holes as a function of N is {x1, x2, …, xN}. This trend shows that, while more data is always better, players can have comparable SG scores even in the regime of limit statistics with our dispersion modeling and heuristic.
+Finally, aim 3 established that our recommendation system provided gains in player performance. The average ESG difference between the players’ intuition and 
+Here is a reference to the table \ref{tab:results}.
+
+Comparing the benchmark, intuition player, to the recommendation-based player, the average SG difference is, X, which on a professional tour, could be a make-or-break improvement.
+\begin{table}
+\caption{results table caption}
+\label{tab:results}
+\begin{tabular}{lrlrrr}
+\toprule
+ & $\Sigma$ SG & $\overline{\text{SG}}$ $\pm \sigma_{\Delta \text{SG}}$ & errSG & avgAimDiff & fracClubChanges \\
+\midrule
+0 & -0.290000 & -0.026 $\pm$ 0.099 & 0.099000 & -3.111111 & 0.181818 \\
+1 & 2.060000 & 0.206 $\pm$ 0.131 & 0.131000 & -2.500000 & 0.200000 \\
+2 & 3.080000 & 0.44 $\pm$ 0.151 & 0.151000 & -6.428571 & 0.000000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+Our recommendation algorithm, from model calculation to hole playthrough, has proven to be a boon for player decision making. Without methods reliant on sizable statistics, we have presented a personalized, statistically-robust model and decision making heuristic that takes the guesswork out of golf and leads to performance gains in real-world settings.
+
+
+
+\end{document}
